@@ -14,7 +14,7 @@ def listen():
     r = sr.Recognizer()
     with sr.Microphone() as source:
         print("Listening...")
-        r.pause_threshold = 1
+        r.pause_threshold = 0.5
         audio = r.listen(source)
 
     try:
@@ -31,7 +31,7 @@ def execute_command(command):
     if 'play' in command:
         song = command.replace('play', '')
         speak(f"Playing {song}")
-        pywhatkit.playonyt(song)
+        link = pywhatkit.playonyt(song)
 
     elif 'set a reminder' in command:
         speak("What should I remind you about?")
@@ -53,15 +53,17 @@ def execute_command(command):
         search_query = command.replace('search', '')
         speak(f"Searching for {search_query}")
         pywhatkit.search(search_query)
+    elif 'download' in command:
+        print("Download recognized")
 
     else:
         speak("I'm sorry, I didn't understand that.")
 
 
 def main():
-    sg.theme('LightGreen')
+    sg.theme('LightPurple')
 
-    layout = [[sg.Text('Assistant:', size=(15, 1)), sg.Text('', key='-OUTPUT-')],
+    layout = [[sg.Text('Assistant:', size=(30, 1)), sg.Text('', key='-OUTPUT-')],
               [sg.Button('Start'), sg.Button('Exit')]]
 
     window = sg.Window('AI Voice Assistant', layout)
