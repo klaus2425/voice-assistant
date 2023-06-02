@@ -1,3 +1,40 @@
 {
-  
+  "intents" : [
+    {
+      "tag" : "greeting",
+      "patterns" : [
+        "Hi",
+        "Hey",
+        "What's Up?",
+        "Hey, how are you doing?",
+        "Good day!",
+        "Hello"
+      ],
+      "responses" : [
+        "Hello there!",
+        "Hi, What can I do for you?"
+
+      ]
+    },
+    {
+      "tag" : "name",
+      "patterns": [
+        "What is your name?",
+        "What do I call you?"
+      ],
+      "responses": [
+        "My name is Kali",
+        "You may call me Kali"
+      ]
+    },
+    {
+      "tag": "file",
+      "patterns": [
+        "Create a file",
+        "Create new file",
+        "Make a file"
+      ],
+      "responses:": []
+    }
+  ]
 }
