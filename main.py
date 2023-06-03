@@ -1,8 +1,11 @@
+import os
+
 import speech_recognition as sr
 import pyttsx3
 import pywhatkit
 import PySimpleGUI as sg
-
+from pytube import Search
+from pytube import YouTube
 
 def speak(text):
     engine = pyttsx3.init()
@@ -14,7 +17,7 @@ def listen():
     r = sr.Recognizer()
     with sr.Microphone() as source:
         print("Listening...")
-        r.pause_threshold = 0.5
+        r.adjust_for_ambient_noise(source, 0.2)
         audio = r.listen(source)
 
     try:
@@ -54,11 +57,19 @@ def execute_command(command):
         speak(f"Searching for {search_query}")
         pywhatkit.search(search_query)
     elif 'download' in command:
-        print("Download recognized")
-
+        download(command)
     else:
         speak("I'm sorry, I didn't understand that.")
 
+
+
+
+
+def download(command):
+    song = command.replace('download', '')
+    video = Search(song).results[0]
+    print(video.watch_url)
+    YouTube(video.watch_url).streams.get_highest_resolution().download('C:\\Users\\'+os.getlogin()+'\\save_path')
 
 def main():
     sg.theme('LightPurple')
