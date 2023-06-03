@@ -66,11 +66,12 @@ def execute_command(command):
 def download(command):
     song = command.replace('download', '')
     video = Search(song).results[0]
-    print(video.watch_url)
+    print('Downloading video')
     if YouTube(video.watch_url).streams.get_highest_resolution().download(
             'C:\\Users\\' + os.getlogin() + '\\Downloads'):  # Save download videos to Downloads folder
-        print("Download Finished")
-
+        print('Download Finished')
+    else:
+        print('Download Failed')
 
 def main():
     sg.theme('LightPurple')
