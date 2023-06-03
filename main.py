@@ -7,6 +7,10 @@ import PySimpleGUI as sg
 from pytube import Search
 from pytube import YouTube
 
+sg.theme('LightPurple')
+layout = [[sg.Text('Assistant:', size=(30, 1)), sg.Text('', key='-OUTPUT-')],
+          [sg.Button('Start'), sg.Button('Exit')]]
+window = sg.Window('AI Voice Assistant', layout)
 
 def speak(text):
     engine = pyttsx3.init()
@@ -73,13 +77,9 @@ def download(command):
     else:
         print('Download Failed')
 
+
 def main():
-    sg.theme('LightPurple')
 
-    layout = [[sg.Text('Assistant:', size=(30, 1)), sg.Text('', key='-OUTPUT-')],
-              [sg.Button('Start'), sg.Button('Exit')]]
-
-    window = sg.Window('AI Voice Assistant', layout)
 
     while True:
         event, values = window.read()
