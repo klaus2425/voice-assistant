@@ -7,6 +7,7 @@ import PySimpleGUI as sg
 from pytube import Search
 from pytube import YouTube
 
+
 def speak(text):
     engine = pyttsx3.init()
     engine.say(text)
@@ -62,14 +63,14 @@ def execute_command(command):
         speak("I'm sorry, I didn't understand that.")
 
 
-
-
-
 def download(command):
     song = command.replace('download', '')
     video = Search(song).results[0]
     print(video.watch_url)
-    YouTube(video.watch_url).streams.get_highest_resolution().download('C:\\Users\\'+os.getlogin()+'\\save_path')
+    if YouTube(video.watch_url).streams.get_highest_resolution().download(
+            'C:\\Users\\' + os.getlogin() + '\\Downloads'):  # Save download videos to Downloads folder
+        print("Download Finished")
+
 
 def main():
     sg.theme('LightPurple')
