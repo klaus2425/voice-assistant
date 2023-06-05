@@ -20,5 +20,13 @@ for voice recognition.
 ## Important Notes:
 <hr>
 
-* Downloaded videos are saved to Downloads folder
-* A quiet environment is suggested for speech recognition accuracy
+* Downloaded videos are saved to Downloads folder.
+* A quiet environment is suggested for speech recognition accuracy.
+
+## Installation
+<hr>
+
+Clone the repository then install the libraries.
+```commandline
+    pip install -r requirements.txt
+```
