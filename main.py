@@ -69,7 +69,6 @@ def play(command):
     speak(f"Playing {song}")
     link = pywhatkit.playonyt(song)
 
-
 def reminder(command):
     speak("What should I remind you about?")
     reminder_text = listen()
