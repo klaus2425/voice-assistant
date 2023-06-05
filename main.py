@@ -1,19 +1,22 @@
 import os
-
 import speech_recognition as sr
 import pyttsx3
 import pywhatkit
-import PySimpleGUI as sg
+import customtkinter
 from pytube import Search
 from pytube import YouTube
 
-sg.theme('LightPurple')
-layout = [[sg.Text('Assistant:', size=(30, 1)), sg.Text('', key='-OUTPUT-')],
-          [sg.Button('Start'), sg.Button('Exit')]]
-window = sg.Window('AI Voice Assistant', layout)
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("dark-blue")
+
+
+
+
 
 def speak(text):
     engine = pyttsx3.init()
+    voices = engine.getProperty('voices')
+    engine.setProperty('voice', voices[1].id)
     engine.say(text)
     engine.runAndWait()
 
@@ -31,71 +34,84 @@ def listen():
         print(f"User: {query}")
         return query
     except Exception as e:
-        print("Please say that again...")
+        speak("Please say that again")
         return None
 
 
 def execute_command(command):
     if 'play' in command:
-        song = command.replace('play', '')
-        speak(f"Playing {song}")
-        link = pywhatkit.playonyt(song)
+        play(command)
 
     elif 'set a reminder' in command:
-        speak("What should I remind you about?")
-        reminder_text = listen()
-        if reminder_text:
-            # Implement your reminder logic here
-            # You can use libraries like datetime, pickle, or a database to store reminders
-            print(f"Reminder set: {reminder_text}")
+        reminder(command)
 
     elif 'create a to-do list' in command:
-        speak("What task would you like to add?")
-        task = listen()
-        if task:
-            # Implement your to-do list logic here
-            # You can store tasks in a list or a file
-            print(f"Task added: {task}")
+        todo(command)
 
     elif 'search' in command:
-        search_query = command.replace('search', '')
-        speak(f"Searching for {search_query}")
-        pywhatkit.search(search_query)
+        search(command)
+
     elif 'download' in command:
         download(command)
+
+    elif 'exit' in command:
+        window.close()
+
     else:
         speak("I'm sorry, I didn't understand that.")
 
 
+def play(command):
+    pos = command.index('play')
+    song = command.replace(command[:pos + 4], '')
+    speak(f"Playing {song}")
+    link = pywhatkit.playonyt(song)
+
+
+def reminder(command):
+    speak("What should I remind you about?")
+    reminder_text = listen()
+    if reminder_text:
+        print(f"Reminder set: {reminder_text}")
+
+
+def todo(command):
+    speak("What task would you like to add?")
+    task = listen()
+    while task:
+        if task == 'stop':
+            break
+        print(f"Task added: {task}")
+        speak('What else?')
+        task = listen()
+
+
+def search(command):
+    pos = command.index('search')
+    search_query = command.replace(command[:pos + len('search')], '')
+    speak(f"Searching for {search_query}")
+    pywhatkit.search(search_query)
+
+
 def download(command):
-    song = command.replace('download', '')
+    pos = command.index('download')
+    song = command.replace(command[:pos + len('download')], '')
     video = Search(song).results[0]
-    print('Downloading video')
+    speak('Downloading' + song)
     if YouTube(video.watch_url).streams.get_highest_resolution().download(
             'C:\\Users\\' + os.getlogin() + '\\Downloads'):  # Save download videos to Downloads folder
-        print('Download Finished')
+        speak('Download Finished')
     else:
-        print('Download Failed')
+        speak('Download Failed')
 
 
 def main():
-
-
     while True:
-        event, values = window.read()
-
-        if event == sg.WINDOW_CLOSED or event == 'Exit':
+        command = listen()
+        if 'exit' in command:
             break
-
-        if event == 'Start':
-            window['-OUTPUT-'].update("Listening...")
-            command = listen()
-            if command:
-                window['-OUTPUT-'].update(command)
-                execute_command(command)
-
-    window.close()
-
+        if command:
+            execute_command(command)
 
 if __name__ == '__main__':
     main()
