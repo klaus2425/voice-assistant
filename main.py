@@ -1,17 +1,16 @@
 import os
+import threading
 import speech_recognition as sr
 import pyttsx3
 import pywhatkit
+import customtkinter as ctk
 from pytube import Search
 from pytube import YouTube
 from datetime import datetime
 
 
 
-# GUI
-
-
-# Microphone
+# Engine, Microphone, and Recognizer
 m = sr.Microphone()
 r = sr.Recognizer()
 engine = pyttsx3.init()
@@ -20,6 +19,7 @@ engine = pyttsx3.init()
 def speak(text):
     voices = engine.getProperty('voices')
     engine.setProperty('voice', voices[1].id)
+    engine.setProperty('rate', 150)
     engine.say(text)
     engine.runAndWait()
 
@@ -27,7 +27,7 @@ def speak(text):
 def listen():
     with m as source:
         print("Listening...")
-        r.adjust_for_ambient_noise(source, duration=0.2)
+        r.adjust_for_ambient_noise(source, duration=0.5)
         audio = r.listen(source)
 
     try:
@@ -44,10 +44,10 @@ def execute_command(command):
         play(command)
 
     elif 'set a reminder' in command:
-        reminder(command)
+        reminder()
 
     elif 'create a to-do list' in command:
-        todo(command)
+        todo()
 
     elif 'search' in command:
         search(command)
@@ -69,14 +69,15 @@ def play(command):
     speak(f"Playing {song}")
     link = pywhatkit.playonyt(song)
 
-def reminder(command):
+
+def reminder():
     speak("What should I remind you about?")
     reminder_text = listen()
     if reminder_text:
         print(f"Reminder set: {reminder_text}")
 
 
-def todo(command):
+def todo():
     speak("What task would you like to add?")
     task = listen()
     while task:
@@ -114,23 +115,44 @@ def time():
 def date():
     speak(datetime.today().strftime('%A %d %B %Y'))
 
+
 def start_va():
     command = listen()
     if 'exit' in command:
+        start_window.quit()
         exit()
     else:
         execute_command(command)
 
-def main():
+
+def run_assistant():
     username = "Jaycie"
     while True:
         text = listen()
         if 'hey cali' and 'cali' in text:
             speak('Hi ' + username + ', how can I help you?')
+            label.configure(text='speak')
             start_va()
             engine.runAndWait()
         if 'exit' in text:
-            break
+            start_window.quit()
+
+
+#GUI
+start_window = ctk.CTk()
+start_window.title('CaliVA')
+start_window.geometry('400x600')
+
+frame = ctk.CTkFrame(master=start_window, width=380, height=580)
+frame.place(relx=0.5, rely=0.5, anchor='center')
+
+label = ctk.CTkLabel(frame, text='CALI')
+label.configure(width=150, height=200)
+label.place(relx=0.5, rely=0.1, anchor='center')
+
+def main():
+    threading.Thread(target=run_assistant).start()
+    start_window.mainloop()
 
 
 if __name__ == '__main__':
