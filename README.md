@@ -14,3 +14,11 @@ for voice recognition.
 * Download YouTube videos
 * Create a todo list
 * Set a reminder
+* Check weather
+* Ask ChatGPT
+
+## Important Notes:
+<hr>
+
+* Downloaded videos are saved to Downloads folder
+* 
