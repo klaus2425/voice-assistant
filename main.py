@@ -1,19 +1,23 @@
 import os
+
+import speech_recognition
 import speech_recognition as sr
 import pyttsx3
 import pywhatkit
-import customtkinter
 from pytube import Search
 from pytube import YouTube
 from datetime import datetime
 
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("dark-blue")
+# GUI
+
+
+# Microphone
 m = sr.Microphone()
+r = sr.Recognizer()
+engine = pyttsx3.init()
 
 
 def speak(text):
-    engine = pyttsx3.init()
     voices = engine.getProperty('voices')
     engine.setProperty('voice', voices[1].id)
     engine.say(text)
@@ -21,7 +25,6 @@ def speak(text):
 
 
 def listen():
-    r = sr.Recognizer()
     with m as source:
         print("Listening...")
         r.adjust_for_ambient_noise(source, duration=0.2)
@@ -34,6 +37,7 @@ def listen():
         return query
     except Exception as e:
         return ''
+
 
 def execute_command(command):
     if 'play' in command:
@@ -102,23 +106,34 @@ def download(command):
     else:
         speak('Download Failed')
 
+
 def time():
     current_time = datetime.now().strftime("%I %M %p").lstrip('0')
     speak("Current time is " + current_time)
 
+
 def date():
     speak(datetime.today().strftime('%A %d %B %Y'))
 
+def start_va():
+    print('VA')
+    command = listen()
+    if 'exit' in command:
+        exit()
+    else:
+        execute_command(command)
+
 def main():
+    username = "Jaycie"
     while True:
-        command = listen()
-        if 'exit' in command:
-            exit()
+        text = listen()
+        if 'hey cali' or 'cali' in text:
+            speak('Hi ' + username + ', how can I help you?')
+            start_va()
+            engine.runAndWait()
+        if 'exit' in text:
+            break
 
-        else:
-            execute_command(command)
-
-        continue
 
 if __name__ == '__main__':
     main()
