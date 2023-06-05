@@ -147,7 +147,7 @@ frame = ctk.CTkFrame(master=start_window, width=380, height=580)
 frame.place(relx=0.5, rely=0.5, anchor='center')
 
 label = ctk.CTkLabel(frame, text='CALI')
-label.configure(width=150, height=200)
+label.configure(width=150, height=200, font=('Helvetica', 30, 'bold'))
 label.place(relx=0.5, rely=0.1, anchor='center')
 
 def main():
