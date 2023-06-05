@@ -15,7 +15,7 @@ for voice recognition.
 * Create a todo list
 * Set a reminder
 * Check weather
-* Ask ChatGPT
+
 
 ## Important Notes:
 <hr>
