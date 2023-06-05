@@ -1,12 +1,12 @@
 import os
-
-import speech_recognition
 import speech_recognition as sr
 import pyttsx3
 import pywhatkit
 from pytube import Search
 from pytube import YouTube
 from datetime import datetime
+
+
 
 # GUI
 
@@ -116,7 +116,6 @@ def date():
     speak(datetime.today().strftime('%A %d %B %Y'))
 
 def start_va():
-    print('VA')
     command = listen()
     if 'exit' in command:
         exit()
@@ -127,7 +126,7 @@ def main():
     username = "Jaycie"
     while True:
         text = listen()
-        if 'hey cali' or 'cali' in text:
+        if 'hey cali' and 'cali' in text:
             speak('Hi ' + username + ', how can I help you?')
             start_va()
             engine.runAndWait()
