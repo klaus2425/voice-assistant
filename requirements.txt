@@ -74,3 +74,5 @@ websockets==11.0.3
 Werkzeug==2.3.4
 wikipedia==1.4.0
 yarl==1.9.2
+
+customtkinter~=5.1.3

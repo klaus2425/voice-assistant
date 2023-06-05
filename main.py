@@ -5,12 +5,11 @@ import pywhatkit
 import customtkinter
 from pytube import Search
 from pytube import YouTube
+from datetime import datetime
 
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
-
-
-
+m = sr.Microphone()
 
 
 def speak(text):
@@ -23,9 +22,9 @@ def speak(text):
 
 def listen():
     r = sr.Recognizer()
-    with sr.Microphone() as source:
+    with m as source:
         print("Listening...")
-        r.adjust_for_ambient_noise(source, 0.2)
+        r.adjust_for_ambient_noise(source, duration=0.2)
         audio = r.listen(source)
 
     try:
@@ -34,9 +33,7 @@ def listen():
         print(f"User: {query}")
         return query
     except Exception as e:
-        speak("Please say that again")
-        return None
-
+        return ''
 
 def execute_command(command):
     if 'play' in command:
@@ -53,11 +50,13 @@ def execute_command(command):
 
     elif 'download' in command:
         download(command)
-
-    elif 'exit' in command:
-        exit()
+    elif 'time' in command:
+        time()
+    elif 'date' in command:
+        date()
     else:
         speak("I'm sorry, I didn't understand that.")
+        return True
 
 
 def play(command):
@@ -103,14 +102,23 @@ def download(command):
     else:
         speak('Download Failed')
 
+def time():
+    current_time = datetime.now().strftime("%I %M %p").lstrip('0')
+    speak("Current time is " + current_time)
+
+def date():
+    speak(datetime.today().strftime('%A %d %B %Y'))
 
 def main():
     while True:
         command = listen()
         if 'exit' in command:
-            break
-        if command:
+            exit()
+
+        else:
             execute_command(command)
+
+        continue
 
 if __name__ == '__main__':
     main()

@@ -21,4 +21,4 @@ for voice recognition.
 <hr>
 
 * Downloaded videos are saved to Downloads folder
-* 
+* A quiet environment is suggested for speech recognition accuracy
