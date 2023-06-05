@@ -55,8 +55,7 @@ def execute_command(command):
         download(command)
 
     elif 'exit' in command:
-        window.close()
-
+        exit()
     else:
         speak("I'm sorry, I didn't understand that.")
 
