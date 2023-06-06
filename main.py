@@ -6,6 +6,7 @@ import pyttsx3
 import pywhatkit
 import time
 import customtkinter as ctk
+import mpv
 from word2number import w2n
 from pytube import Search
 from pytube import YouTube
@@ -69,9 +70,11 @@ def execute_command(command):
 def play(command):
     pos = command.index('play')
     song = command.replace(command[:pos + 4], '')
-    action_label.configure(text=f"Playing {song}")
-    speak(f"Playing {song}")
-    link = pywhatkit.playonyt(song)
+    video = Search(song).results[0]
+    action_label.configure(text=f"Playing {video.title}")
+    speak(f"Playing {video.title}")
+    pywhatkit.playonyt(song)
+
 
 
 def todo():
@@ -124,8 +127,11 @@ def download(command):
     if YouTube(video.watch_url).streams.get_highest_resolution().download(
             'C:\\Users\\' + os.getlogin() + '\\Downloads'):  # Save download videos to Downloads folder
         speak('Download Finished')
+        action_label.configure(text='Download Finished')
     else:
         speak('Download Failed')
+        action_label.configure(text='Download Failed')
+
 
 
 def ask_time():
@@ -188,7 +194,7 @@ logo_label = ctk.CTkLabel(frame, image=logo, text='')
 logo_label.place(relx=0.5, rely=0.4, anchor='center')
 
 action_label = customtkinter.CTkLabel(frame, text="Listening...")
-action_label.configure(font=('Helvetica', 20))
+action_label.configure(font=('Helvetica', 20), wraplength=300)
 action_label.place(relx=0.5, rely=0.8, anchor='center')
 
 
