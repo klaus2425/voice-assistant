@@ -187,14 +187,14 @@ def run_assistant():
 
 def help_clicked():
     top_level = ctk.CTkToplevel()
-    top_level.geometry("500x300")
+    top_level.geometry("550x300")
     top_level.title("Commands")
     top_level.resizable(False, False)
     top_level.lift()
     top_level.attributes('-topmost', True)
     label_help = ctk.CTkLabel(master=top_level, text="CALI Commands", font=('Helvetica', 25, 'bold'))
     label_help.place(x=25, y=20)
-    label1 = ctk.CTkLabel(master=top_level, text="• Play <Video Name> - Opens youtube and plays the video you said.",
+    label1 = ctk.CTkLabel(master=top_level, text="• Play <Video Name> - Opens a video player and plays the video you said.",
                           font=('Helvetica', 15))
     label1.place(x=25, y=50)
     label2 = ctk.CTkLabel(master=top_level,
@@ -202,9 +202,19 @@ def help_clicked():
                           font=('Helvetica', 15))
     label2.place(x=25, y=80)
     label3 = ctk.CTkLabel(master=top_level,
-                          text="• Search <Search Query>- Opens google and searches for the words you said.",
+                          text="• Download <Search Query>- Download your search query on youtube.",
                           font=('Helvetica', 15))
-    label3.place(x=25, y=100)
+    label3.place(x=25, y=110)
+
+    label4 = ctk.CTkLabel(master=top_level,
+                          text="• Create a list - Make a list. File is saved in your Documents folder",
+                          font=('Helvetica', 15))
+    label4.place(x=25, y=140)
+    label4 = ctk.CTkLabel(master=top_level,
+                          text="• Set a reminder - Set a reminder in minutes. The AI will alert you after the given "
+                               "time.",
+                          font=('Helvetica', 15))
+    label4.place(x=25, y=170)
 
 
 # GUI
