@@ -6,7 +6,6 @@ import pyttsx3
 import pywhatkit
 import time
 import customtkinter as ctk
-import mpv
 from word2number import w2n
 from pytube import Search
 from pytube import YouTube
@@ -172,6 +171,25 @@ def run_assistant():
             start_window.quit()
             exit()
 
+def help_clicked():
+    top_level = ctk.CTkToplevel()
+    top_level.geometry("500x300")
+    top_level.title("Commands")
+    top_level.resizable(False, False)
+    top_level.lift()
+    top_level.attributes('-topmost', True)
+    label_help = ctk.CTkLabel(master=top_level, text="CALI Commands", font=('Helvetica', 25, 'bold'))
+    label_help.place(x=25, y=20)
+    label1 = ctk.CTkLabel(master=top_level, text="• Play <Video Name> - Opens youtube and plays the video you said.",
+                          font=('Helvetica', 15))
+    label1.place(x=25, y=50)
+    label2 = ctk.CTkLabel(master=top_level, text="• Search <Search Query>- Opens google and searches for the words you said.",
+                          font=('Helvetica', 15))
+    label2.place(x=25, y=80)
+    label3 = ctk.CTkLabel(master=top_level,
+                          text="• Search <Search Query>- Opens google and searches for the words you said.",
+                          font=('Helvetica', 15))
+    label3.place(x=25, y=100)
 
 # GUI
 start_window = ctk.CTk()
@@ -197,12 +215,17 @@ action_label = customtkinter.CTkLabel(frame, text="Listening...")
 action_label.configure(font=('Helvetica', 20), wraplength=300)
 action_label.place(relx=0.5, rely=0.8, anchor='center')
 
+help_button = customtkinter.CTkButton(frame, text='!', command=help_clicked)
+help_button.configure(corner_radius=14, width=14, font=('Helvetica', 20, 'bold'))
+help_button.place(x=20, y=520)
+
+
 
 def main():
+
     threading.Thread(target=run_assistant).start()
     start_window.resizable(False, False)
     start_window.iconbitmap(r'images/logo.ico')
-    start_window.wm_state('zoomed')
     start_window.mainloop()
 
 
