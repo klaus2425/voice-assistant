@@ -145,6 +145,7 @@ def run_assistant():
             start_window.quit()
             exit()
 
+
 # GUI
 start_window = ctk.CTk()
 start_window.title('CaliVA')

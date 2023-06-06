@@ -10,10 +10,10 @@ for voice recognition.
 
 * Google Search
 * Play YouTube videos
-* Play music
+* Play Music
 * Download YouTube videos
 * Create a list
-* Check weather
+
 
 
 ## Important Notes:
