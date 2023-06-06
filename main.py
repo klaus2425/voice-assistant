@@ -1,5 +1,6 @@
 import os
 import threading
+import customtkinter
 import speech_recognition as sr
 import pyttsx3
 import pywhatkit
@@ -7,8 +8,7 @@ import customtkinter as ctk
 from pytube import Search
 from pytube import YouTube
 from datetime import datetime
-
-
+from PIL import Image
 
 # Engine, Microphone, and Recognizer
 m = sr.Microphone()
@@ -27,12 +27,15 @@ def speak(text):
 def listen():
     with m as source:
         print("Listening...")
+        action_label.configure(text='Listening...')
         r.adjust_for_ambient_noise(source, duration=0.5)
         audio = r.listen(source)
 
     try:
         print("Recognizing...")
+        action_label.configure(text='Recognizing...')
         query = r.recognize_google(audio, language='en')
+        action_label.configure(text='Recognizing...')
         print(f"User: {query}")
         return query
     except Exception as e:
@@ -43,10 +46,7 @@ def execute_command(command):
     if 'play' in command:
         play(command)
 
-    elif 'set a reminder' in command:
-        reminder()
-
-    elif 'create a to-do list' in command:
+    elif 'list' in command:
         todo()
 
     elif 'search' in command:
@@ -56,7 +56,7 @@ def execute_command(command):
         download(command)
     elif 'time' in command:
         time()
-    elif 'date' in command:
+    elif 'today' in command:
         date()
     else:
         speak("I'm sorry, I didn't understand that.")
@@ -66,24 +66,22 @@ def execute_command(command):
 def play(command):
     pos = command.index('play')
     song = command.replace(command[:pos + 4], '')
+    action_label.configure(text=f"Playing {song}")
     speak(f"Playing {song}")
     link = pywhatkit.playonyt(song)
-
-
-def reminder():
-    speak("What should I remind you about?")
-    reminder_text = listen()
-    if reminder_text:
-        print(f"Reminder set: {reminder_text}")
 
 
 def todo():
     speak("What task would you like to add?")
     task = listen()
+    todo_list = open('C:\\Users\\' + os.getlogin() + '\\Documents\\List.txt', 'w')
+    count = 1
     while task:
         if task == 'stop':
             break
-        print(f"Task added: {task}")
+        todo_list.write(f'{count}. {task}\n')
+        print(f"{count}Task added: {task}")
+        count += 1
         speak('What else?')
         task = listen()
 
@@ -91,6 +89,7 @@ def todo():
 def search(command):
     pos = command.index('search')
     search_query = command.replace(command[:pos + len('search')], '')
+    action_label.configure(text=f"Searching for {search_query}")
     speak(f"Searching for {search_query}")
     pywhatkit.search(search_query)
 
@@ -99,6 +98,7 @@ def download(command):
     pos = command.index('download')
     song = command.replace(command[:pos + len('download')], '')
     video = Search(song).results[0]
+    action_label.configure(text=f'Downloading {song}')
     speak('Downloading' + song)
     if YouTube(video.watch_url).streams.get_highest_resolution().download(
             'C:\\Users\\' + os.getlogin() + '\\Downloads'):  # Save download videos to Downloads folder
@@ -109,16 +109,21 @@ def download(command):
 
 def time():
     current_time = datetime.now().strftime("%I %M %p").lstrip('0')
+    current_time_label = datetime.now().strftime("%I:%M %p").lstrip('0')
+    action_label.configure(text=f'Current time is {current_time_label}')
     speak("Current time is " + current_time)
 
 
 def date():
-    speak(datetime.today().strftime('%A %d %B %Y'))
+    date_today = datetime.today().strftime('%A %d %B %Y')
+    speak(f"The date today is {date_today}")
+    action_label.configure(text=f'The date today is {date_today}')
 
 
 def start_va():
     command = listen()
     if 'exit' in command:
+        speak('Goodbye!')
         start_window.quit()
         exit()
     else:
@@ -129,16 +134,18 @@ def run_assistant():
     username = "Jaycie"
     while True:
         text = listen()
-        if 'hey cali' and 'cali' in text:
+        if 'cali' in text:
+            action_label.configure(text=f'Hi {username}, how can I help you?')
             speak('Hi ' + username + ', how can I help you?')
-            label.configure(text='speak')
+            action_label.configure(text=f'Hi {username}, how can I help you?')
             start_va()
             engine.runAndWait()
         if 'exit' in text:
+            speak('Goodbye!')
             start_window.quit()
+            exit()
 
-
-#GUI
+# GUI
 start_window = ctk.CTk()
 start_window.title('CaliVA')
 start_window.geometry('400x600')
@@ -147,11 +154,26 @@ frame = ctk.CTkFrame(master=start_window, width=380, height=580)
 frame.place(relx=0.5, rely=0.5, anchor='center')
 
 label = ctk.CTkLabel(frame, text='CALI')
-label.configure(width=150, height=200, font=('Helvetica', 30, 'bold'))
+label.configure(width=150, height=200, font=('Helvetica', 60, 'bold'))
 label.place(relx=0.5, rely=0.1, anchor='center')
+
+logo = ctk.CTkImage(light_image=Image.open("images/MicrophoneLogoInactive.png"),
+                    dark_image=Image.open("images/MicrophoneLogoInactive.png"),
+                    size=(220, 220)
+                    )
+
+logo_label = ctk.CTkLabel(frame, image=logo, text='')
+logo_label.place(relx=0.5, rely=0.4, anchor='center')
+
+action_label = customtkinter.CTkLabel(frame, text="Listening...")
+action_label.configure(font=('Helvetica', 20))
+action_label.place(relx=0.5, rely=0.8, anchor='center')
+
 
 def main():
     threading.Thread(target=run_assistant).start()
+    start_window.iconbitmap(r'images/logo.ico')
+    start_window.wm_state('zoomed')
     start_window.mainloop()
 
 

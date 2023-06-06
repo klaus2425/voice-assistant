@@ -12,8 +12,7 @@ for voice recognition.
 * Play YouTube videos
 * Play music
 * Download YouTube videos
-* Create a todo list
-* Set a reminder
+* Create a list
 * Check weather
 
 
@@ -22,7 +21,8 @@ for voice recognition.
 
 * Downloaded videos are saved to Downloads folder.
 * A quiet environment is suggested for speech recognition accuracy.
-
+* Good internet connection is recommended.
+* Lists are save in your documents folder.
 ## Installation
 <hr>
 
