@@ -1,18 +1,19 @@
 import os
 import threading
+import time
+from datetime import datetime
+
 import customtkinter
-import speech_recognition as sr
+import customtkinter as ctk
+import moviepy.editor
+import pygame
 import pyttsx3
 import pywhatkit
-import moviepy.editor
-import time
-import pygame
-import customtkinter as ctk
-from word2number import w2n
+import speech_recognition as sr
+from PIL import Image
 from pytube import Search
 from pytube import YouTube
-from datetime import datetime
-from PIL import Image
+from word2number import w2n
 
 # Engine, Microphone, and Recognizer
 m = sr.Microphone()
@@ -42,7 +43,7 @@ def listen():
         action_label.configure(text='Recognizing...')
         print(f"User: {query}")
         return query
-    except Exception as e:
+    except:
         return ''
 
 
@@ -73,12 +74,12 @@ def play(command):
     pos = command.index('play')
     song = command.replace(command[:pos + 4], '')
     video = Search(song).results[0]
-    action_label.configure(text=f"Playing {video.title}")
-    speak(f"Playing {video.title}")
+    action_label.configure(text=f"Loading {video.title}")
+    speak(f"Loading {video.title}")
     # pywhatkit.playonyt(song)
     if YouTube(video.watch_url).streams.get_highest_resolution().download(filename="stream.mp4"):
-        speak('Download Finished')
-        action_label.configure(text='Download Finished')
+        speak('Loading finished')
+        action_label.configure(text='Loading Finished')
         pygame.init()
         p_video = moviepy.editor.VideoFileClip("stream.mp4")
         p_video.preview()
@@ -86,7 +87,6 @@ def play(command):
     else:
         speak('Download Failed')
         action_label.configure(text='Download Failed')
-
 
 
 def todo():
@@ -108,6 +108,7 @@ def reminder():
     def timer(minutes, t):
         time.sleep(minutes)
         speak(f"Hi {os.getlogin()}, you need to {t}")
+
     speak("What do you want me to remind you?")
     task = listen()
     speak("In how many minutes?")
@@ -143,7 +144,6 @@ def download(command):
     else:
         speak('Download Failed')
         action_label.configure(text='Download Failed')
-
 
 
 def ask_time():
@@ -184,6 +184,7 @@ def run_assistant():
             start_window.quit()
             exit()
 
+
 def help_clicked():
     top_level = ctk.CTkToplevel()
     top_level.geometry("500x300")
@@ -196,13 +197,15 @@ def help_clicked():
     label1 = ctk.CTkLabel(master=top_level, text="• Play <Video Name> - Opens youtube and plays the video you said.",
                           font=('Helvetica', 15))
     label1.place(x=25, y=50)
-    label2 = ctk.CTkLabel(master=top_level, text="• Search <Search Query>- Opens google and searches for the words you said.",
+    label2 = ctk.CTkLabel(master=top_level,
+                          text="• Search <Search Query>- Opens google and searches for the words you said.",
                           font=('Helvetica', 15))
     label2.place(x=25, y=80)
     label3 = ctk.CTkLabel(master=top_level,
                           text="• Search <Search Query>- Opens google and searches for the words you said.",
                           font=('Helvetica', 15))
     label3.place(x=25, y=100)
+
 
 # GUI
 start_window = ctk.CTk()
@@ -233,9 +236,7 @@ help_button.configure(corner_radius=14, width=14, font=('Helvetica', 20, 'bold')
 help_button.place(x=20, y=520)
 
 
-
 def main():
-
     threading.Thread(target=run_assistant).start()
     start_window.resizable(False, False)
     start_window.iconbitmap(r'images/logo.ico')

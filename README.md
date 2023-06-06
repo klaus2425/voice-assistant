@@ -9,7 +9,7 @@ for voice recognition.
 <hr>
 
 * Google Search
-* Play YouTube videos
+* Stream YouTube videos
 * Play Music
 * Download YouTube videos
 * Create a list
