@@ -13,6 +13,7 @@ for voice recognition.
 * Play Music
 * Download YouTube videos
 * Create a list
+* Set a reminder
 
 
 
@@ -22,7 +23,7 @@ for voice recognition.
 * Downloaded videos are saved to Downloads folder.
 * A quiet environment is suggested for speech recognition accuracy.
 * Good internet connection is recommended.
-* Lists are save in your documents folder.
+* Lists are saved in your Documents folder.
 ## Installation
 <hr>
 

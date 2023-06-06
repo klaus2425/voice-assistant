@@ -4,7 +4,9 @@ import customtkinter
 import speech_recognition as sr
 import pyttsx3
 import pywhatkit
+import time
 import customtkinter as ctk
+from word2number import w2n
 from pytube import Search
 from pytube import YouTube
 from datetime import datetime
@@ -13,7 +15,7 @@ from PIL import Image
 # Engine, Microphone, and Recognizer
 m = sr.Microphone()
 r = sr.Recognizer()
-engine = pyttsx3.init()
+engine = pyttsx3.init(driverName='sapi5')
 
 
 def speak(text):
@@ -51,11 +53,12 @@ def execute_command(command):
 
     elif 'search' in command:
         search(command)
-
+    elif 'reminder' in command:
+        reminder()
     elif 'download' in command:
         download(command)
     elif 'time' in command:
-        time()
+        ask_time()
     elif 'today' in command:
         date()
     else:
@@ -86,6 +89,24 @@ def todo():
         task = listen()
 
 
+def reminder():
+    def timer(minutes, t):
+        time.sleep(minutes)
+        speak(f"Hi {os.getlogin()}, you need to {t}")
+    speak("What do you want me to remind you?")
+    task = listen()
+    speak("In how many minutes?")
+    reminder_time = listen().lower().replace('minutes', '').replace('in', '').replace('minute', '').strip()
+    try:
+        time_num = w2n.word_to_num(reminder_time)
+        time_num = 60 * time_num
+        print(time_num)
+        threading.Thread(target=timer, args=(time_num, task)).start()
+    except:
+        speak("Sorry, I didn't understand that")
+        run_assistant()
+
+
 def search(command):
     pos = command.index('search')
     search_query = command.replace(command[:pos + len('search')], '')
@@ -107,7 +128,7 @@ def download(command):
         speak('Download Failed')
 
 
-def time():
+def ask_time():
     current_time = datetime.now().strftime("%I %M %p").lstrip('0')
     current_time_label = datetime.now().strftime("%I:%M %p").lstrip('0')
     action_label.configure(text=f'Current time is {current_time_label}')
@@ -131,7 +152,7 @@ def start_va():
 
 
 def run_assistant():
-    username = "Jaycie"
+    username = os.getlogin()
     while True:
         text = listen()
         if 'cali' in text:
@@ -173,6 +194,7 @@ action_label.place(relx=0.5, rely=0.8, anchor='center')
 
 def main():
     threading.Thread(target=run_assistant).start()
+    start_window.resizable(False, False)
     start_window.iconbitmap(r'images/logo.ico')
     start_window.wm_state('zoomed')
     start_window.mainloop()
