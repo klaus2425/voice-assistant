@@ -4,7 +4,9 @@ import customtkinter
 import speech_recognition as sr
 import pyttsx3
 import pywhatkit
+import moviepy.editor
 import time
+import pygame
 import customtkinter as ctk
 from word2number import w2n
 from pytube import Search
@@ -46,6 +48,7 @@ def listen():
 
 def execute_command(command):
     if 'play' in command:
+
         play(command)
 
     elif 'list' in command:
@@ -72,7 +75,17 @@ def play(command):
     video = Search(song).results[0]
     action_label.configure(text=f"Playing {video.title}")
     speak(f"Playing {video.title}")
-    pywhatkit.playonyt(song)
+    # pywhatkit.playonyt(song)
+    if YouTube(video.watch_url).streams.get_highest_resolution().download(filename="stream.mp4"):
+        speak('Download Finished')
+        action_label.configure(text='Download Finished')
+        pygame.init()
+        p_video = moviepy.editor.VideoFileClip("stream.mp4")
+        p_video.preview()
+        pygame.quit()
+    else:
+        speak('Download Failed')
+        action_label.configure(text='Download Failed')
 
 
 
