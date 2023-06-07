@@ -2,8 +2,6 @@ import os
 import threading
 import time
 from datetime import datetime
-
-import customtkinter
 import customtkinter as ctk
 import moviepy.editor
 import pygame
